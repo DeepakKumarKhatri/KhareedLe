@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../features/navbar/Navbar";
-import ProductList from "../features/product-list/ProductList";
+import ProductList from "../features/product-list/components/ProductList";
 import Cart from "../features/cart/Cart";
 
 const HomePage = () => {

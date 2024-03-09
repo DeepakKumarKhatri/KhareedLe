@@ -6,13 +6,14 @@ import {
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import logoTitle from '../../assets/images/logoTitle.png'
+import Banner from "../banner/Banner";
 
 const Navbar = ({ children, setShowCart }) => {
   const user = {
-    name: "Tom Cook",
+    name: "Deepak Kumar",
     email: "tom@example.com",
-    imageUrl:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    imageUrl: "https://avatars.githubusercontent.com/u/86526696?v=4",
   };
   const navigation = [
     { name: "Dashboard", href: "#", current: true },
@@ -29,7 +30,7 @@ const Navbar = ({ children, setShowCart }) => {
   return (
     <>
       <div className="min-h-full">
-        <Disclosure as="nav" className="bg-gray-800">
+        <Disclosure as="nav" className="bg-customBlue">
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -37,9 +38,9 @@ const Navbar = ({ children, setShowCart }) => {
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
                       <img
-                        className="h-8 w-8"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
+                        className="h-12 w-18"
+                        src={logoTitle}
+                        alt="KhareedLe"
                       />
                     </div>
                     <div className="hidden md:block">
@@ -50,7 +51,7 @@ const Navbar = ({ children, setShowCart }) => {
                             href={item.href}
                             className={classNames(
                               item.current
-                                ? "bg-gray-900 text-white"
+                                ? "bg-customPink text-white"
                                 : "text-gray-300 hover:bg-gray-700 hover:text-white",
                               "rounded-md px-3 py-2 text-sm font-medium"
                             )}
@@ -223,9 +224,7 @@ const Navbar = ({ children, setShowCart }) => {
         {/* Show Promotions Deals Here from Admin End with horizental slider*/}
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              KhareedLe
-            </h1>
+            <Banner/>
           </div>
         </header>
         <main>
