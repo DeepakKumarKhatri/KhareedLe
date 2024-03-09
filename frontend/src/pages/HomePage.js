@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../features/navbar/Navbar";
 import ProductList from "../features/product-list/ProductList";
+import Cart from "../features/cart/Cart";
 
 const HomePage = () => {
-  return <Navbar children={<ProductList />} />;
+  const [showCart, setShowCart] = useState(false);
+
+  return (
+    <>
+      <Navbar setShowCart={setShowCart} children={<ProductList />} />
+      {showCart && <Cart setShowCart={setShowCart} />}
+    </>
+  );
 };
 
 export default HomePage;

@@ -28,7 +28,7 @@ const ProductList = () => {
       color: "Black",
     },
     {
-      id: 1,
+      id: 2,
       name: "Basic Tee",
       href: "#",
       imageSrc:
@@ -38,7 +38,7 @@ const ProductList = () => {
       color: "Black",
     },
     {
-      id: 1,
+      id: 3,
       name: "Basic Tee",
       href: "#",
       imageSrc:
@@ -48,7 +48,7 @@ const ProductList = () => {
       color: "Black",
     },
     {
-      id: 1,
+      id: 4,
       name: "Basic Tee",
       href: "#",
       imageSrc:
