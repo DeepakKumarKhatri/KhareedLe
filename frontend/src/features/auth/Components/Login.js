@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { increment, selectCount, incrementAsync } from "../authSlice";
 import logoTitle from '../../../assets/images/logoBanner.png'
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const count = useSelector(selectCount);
@@ -82,12 +83,12 @@ const Login = () => {
 
         <p className="mt-10 text-center text-sm text-gray-500">
           New User?{" "}
-          <a
-            href="#"
+          <Link
+            to={'/signup'}
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
             Sign Up
-          </a>
+          </Link>
         </p>
       </div>
     </div>
