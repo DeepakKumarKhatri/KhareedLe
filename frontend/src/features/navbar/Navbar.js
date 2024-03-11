@@ -16,8 +16,10 @@ const Navbar = ({ children, setShowCart }) => {
     imageUrl: "https://avatars.githubusercontent.com/u/86526696?v=4",
   };
   const navigation = [
-    { name: "Dashboard", href: "#", current: true },
-    { name: "Team", href: "#", current: false },
+    { name: "Home", href: "#", current: true },
+    { name: "Shop", href: "#", current: false },
+    { name: "Products", href: "#", current: false },
+    { name: "Blog", href: "#", current: false },
   ];
   const userNavigation = [
     { name: "Your Profile", href: "#" },
@@ -36,13 +38,15 @@ const Navbar = ({ children, setShowCart }) => {
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-12 w-18"
-                        src={logoTitle}
-                        alt="KhareedLe"
-                      />
-                    </div>
+                    <Link to={'/'}>
+                      <div className="flex-shrink-0">
+                        <img
+                          className="h-12 w-18"
+                          src={logoTitle}
+                          alt="KhareedLe"
+                        />
+                      </div>
+                    </Link>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
@@ -224,7 +228,7 @@ const Navbar = ({ children, setShowCart }) => {
         {/* Show Promotions Deals Here from Admin End with horizental slider*/}
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <Banner/>
+            <Banner />
           </div>
         </header>
         <main>
