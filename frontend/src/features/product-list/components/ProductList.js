@@ -1,6 +1,10 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectCount } from "../productSlice";
+import {
+  selectAllProducts,
+  fetchAllProductsAsync,
+  fetchProductsByFilterAsync,
+} from "../productSlice";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
@@ -12,41 +16,69 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
-import { products } from "../../../config/dummyData";
+import { fetchAllProducts } from "../productAPI";
 
 const ProductList = () => {
-  const count = useSelector(selectCount);
   const dispatch = useDispatch();
+  const products = useSelector(selectAllProducts);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [filter, setFilter] = useState({});
+
+  useEffect(() => {
+    dispatch(fetchAllProductsAsync());
+  }, [dispatch]);
 
   const sortOptions = [
-    { name: "Most Popular", href: "#", current: true },
-    { name: "Best Rating", href: "#", current: false },
-    { name: "Newest", href: "#", current: false },
-    { name: "Price: Low to High", href: "#", current: false },
-    { name: "Price: High to Low", href: "#", current: false },
+    { name: "Price: Low to High", sort: "price", order: "asc", current: false },
+    {
+      name: "Price: High to Low",
+      sort: "price",
+      order: "desc",
+      current: false,
+    },
   ];
   const filters = [
     {
-      id: "color",
-      name: "Color",
+      id: "brand",
+      name: "Brand",
       options: [
-        { value: "white", label: "White", checked: false },
-        { value: "beige", label: "Beige", checked: false },
-        { value: "blue", label: "Blue", checked: true },
-        { value: "brown", label: "Brown", checked: false },
-        { value: "green", label: "Green", checked: false },
-        { value: "purple", label: "Purple", checked: false },
+        { value: "Apple", label: "Apple", checked: false },
+        { value: "Samsung", label: "Samsung", checked: false },
+        { value: "OPPO", label: "OPPO", checked: false },
+        { value: "Huawei", label: "Huawei", checked: false },
+        {
+          value: "Microsoft Surface",
+          label: "Microsoft Surface",
+          checked: false,
+        },
+        { value: "Infinix", label: "Infinix", checked: false },
+        { value: "HP Pavilion", label: "HP Pavilion", checked: false },
+        {
+          value: "Impression of Acqua Di Gio",
+          label: "Impression of Acqua Di Gio",
+          checked: false,
+        },
+        { value: "Royal_Mirage", label: "Royal_Mirage", checked: false },
+        {
+          value: "Fog Scent Xpressio",
+          label: "Fog Scent Xpressio",
+          checked: false,
+        },
+        { value: "Al Munakh", label: "Al Munakh", checked: false },
+        {
+          value: "Lord - Al-Rehab",
+          label: "Lord   Al Rehab",
+          checked: false,
+        },
       ],
     },
     {
       id: "category",
       name: "Category",
       options: [
-        { value: "new-arrivals", label: "New Arrivals", checked: false },
-        { value: "sale", label: "Sale", checked: false },
-        { value: "travel", label: "Travel", checked: true },
-        { value: "organization", label: "Organization", checked: false },
-        { value: "accessories", label: "Accessories", checked: false },
+        { value: "smartphones", label: "smartphones", checked: false },
+        { value: "laptops", label: "laptops", checked: false },
+        { value: "fragrances", label: "fragrances", checked: false },
       ],
     },
     {
@@ -87,7 +119,23 @@ const ProductList = () => {
   ];
 
   const classNames = (...classes) => classes.filter(Boolean).join(" ");
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const handleFilter = (e, section, option) => {
+    const appliedFilter = { ...filter, [section.id]: option.value };
+    setFilter(appliedFilter);
+    dispatch(fetchProductsByFilterAsync(appliedFilter));
+  };
+
+  const handleSort = (e, option) => {
+    const appliedFilter = {
+      ...filter,
+      _sort: option.sort,
+      _order: option.order,
+    };
+    setFilter(appliedFilter);
+    dispatch(fetchProductsByFilterAsync(appliedFilter));
+    console.log(appliedFilter);
+  };
 
   return (
     <div className="bg-white">
@@ -234,8 +282,8 @@ const ProductList = () => {
                       {sortOptions.map((option) => (
                         <Menu.Item key={option.name}>
                           {({ active }) => (
-                            <a
-                              href={option.href}
+                            <p
+                              onClick={(e) => handleSort(e, option)}
                               className={classNames(
                                 option.current
                                   ? "font-medium text-gray-900"
@@ -245,7 +293,7 @@ const ProductList = () => {
                               )}
                             >
                               {option.name}
-                            </a>
+                            </p>
                           )}
                         </Menu.Item>
                       ))}
@@ -323,6 +371,9 @@ const ProductList = () => {
                                   defaultValue={option.value}
                                   type="checkbox"
                                   defaultChecked={option.checked}
+                                  onChange={(e) =>
+                                    handleFilter(e, section, option)
+                                  }
                                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                 />
                                 <label
@@ -347,11 +398,11 @@ const ProductList = () => {
                   <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                       {products.map((product) => (
-                        <Link to={"/detail"}>
-                          <div
-                            key={product.id}
-                            className="group relative border-solid border-2 p-2 border-gray-200 rounded-xl"
-                          >
+                        <div
+                          key={product.id}
+                          className="group relative border-solid border-2 p-2 border-gray-200 rounded-xl"
+                        >
+                          <Link to={"/detail"}>
                             <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                               <img
                                 src={product.imageSrc}
@@ -362,16 +413,13 @@ const ProductList = () => {
                             <div className="mt-4 flex justify-between">
                               <div>
                                 <h3 className="text-sm text-gray-700">
-                                  <a href={product.href}>
-                                    <span
-                                      aria-hidden="true"
-                                      className="absolute inset-0"
-                                    />
-                                    {product.name.length > 20
-                                      ? product.name.substring(0, 20 - 3) +
-                                        "..."
-                                      : product.name}
-                                  </a>
+                                  <span
+                                    aria-hidden="true"
+                                    className="absolute inset-0"
+                                  />
+                                  {product.title.length > 20
+                                    ? product.title.substring(0, 20 - 3) + "..."
+                                    : product.title}
                                 </h3>
                                 <p className="mt-1 text-sm text-gray-500">
                                   {product.color}
@@ -390,8 +438,8 @@ const ProductList = () => {
                                 </p>
                               </div>
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
+                        </div>
                       ))}
                     </div>
                   </div>

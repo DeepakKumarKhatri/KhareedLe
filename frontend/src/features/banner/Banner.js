@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { increment, selectCount, incrementAsync } from "./bannerSlice";
+// import { useSelector, useDispatch } from "react-redux";
+// import { increment, incrementAsync } from "./bannerSlice";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 
 const Banner = () => {
-  const count = useSelector(selectCount);
-  const dispatch = useDispatch();
+  // const count = useSelector(selectCount);
+  // const dispatch = useDispatch();
 
   return (
     <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
