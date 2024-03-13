@@ -5,6 +5,10 @@ import {
   fetchAllProductsAsync,
   fetchProductsByFilterAsync,
   selectTotalItems,
+  selectBrands,
+  selectCategories,
+  fetchBrandsAsync,
+  fetchCategoriesAsync,
 } from "../productSlice";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -23,6 +27,8 @@ const ProductList = () => {
   const dispatch = useDispatch();
   const products = useSelector(selectAllProducts);
   const totalItems = useSelector(selectTotalItems);
+  const brands = useSelector(selectBrands);
+  const categories = useSelector(selectCategories);
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState({});
   const [page, setPage] = useState(1);
@@ -41,65 +47,19 @@ const ProductList = () => {
       current: false,
     },
   ];
+
   const filters = [
     {
       id: "brand",
       name: "Brand",
-      options: [
-        { value: "Apple", label: "Apple", checked: false },
-        { value: "Samsung", label: "Samsung", checked: false },
-        { value: "OPPO", label: "OPPO", checked: false },
-        { value: "Huawei", label: "Huawei", checked: false },
-        {
-          value: "Microsoft Surface",
-          label: "Microsoft Surface",
-          checked: false,
-        },
-        { value: "Infinix", label: "Infinix", checked: false },
-        { value: "HP Pavilion", label: "HP Pavilion", checked: false },
-        {
-          value: "Impression of Acqua Di Gio",
-          label: "Impression of Acqua Di Gio",
-          checked: false,
-        },
-        { value: "Royal_Mirage", label: "Royal_Mirage", checked: false },
-        {
-          value: "Fog Scent Xpressio",
-          label: "Fog Scent Xpressio",
-          checked: false,
-        },
-        { value: "Al Munakh", label: "Al Munakh", checked: false },
-        {
-          value: "Lord - Al-Rehab",
-          label: "Lord   Al Rehab",
-          checked: false,
-        },
-      ],
+      options: brands,
     },
     {
       id: "category",
       name: "Category",
-      options: [
-        { value: "smartphones", label: "smartphones", checked: false },
-        { value: "laptops", label: "laptops", checked: false },
-        { value: "fragrances", label: "fragrances", checked: false },
-      ],
-    },
-    {
-      id: "size",
-      name: "Size",
-      options: [
-        { value: "2l", label: "2L", checked: false },
-        { value: "6l", label: "6L", checked: false },
-        { value: "12l", label: "12L", checked: false },
-        { value: "18l", label: "18L", checked: false },
-        { value: "20l", label: "20L", checked: false },
-        { value: "40l", label: "40L", checked: true },
-      ],
+      options: categories,
     },
   ];
-
-  const classNames = (...classes) => classes.filter(Boolean).join(" ");
 
   const handleFilter = (e, section, option) => {
     const appliedFilter = { ...filter };
@@ -132,9 +92,16 @@ const ProductList = () => {
     setPage(page);
   };
 
+  const classNames = (...classes) => classes.filter(Boolean).join(" ");
+
   useEffect(() => {
     setPage(1);
   }, [totalItems, sort]);
+
+  useEffect(() => {
+    dispatch(fetchBrandsAsync());
+    dispatch(fetchCategoriesAsync());
+  }, [dispatch]);
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
@@ -419,21 +386,23 @@ const DesktopFilter = ({ filters, handleFilter }) => {
   );
 };
 const Pagination = ({ handlePage, page, setPage, totalItems = 100 }) => {
+  const totalPages = Math.ceil(totalItems / LIMIT_OF_PAGE);
+
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
-        <a
-          href="#"
+        <div
+          onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
           className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Previous
-        </a>
-        <a
-          href="#"
+        </div>
+        <div
+          onClick={(e) => handlePage(page < totalPages ? page + 1 : page)}
           className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Next
-        </a>
+        </div>
       </div>
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
@@ -456,40 +425,38 @@ const Pagination = ({ handlePage, page, setPage, totalItems = 100 }) => {
             className="isolate inline-flex -space-x-px rounded-md shadow-sm"
             aria-label="Pagination"
           >
-            <a
-              href="#"
+            <div
+              onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
               className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </div>
 
-            {Array.from({ length: Math.ceil(totalItems / LIMIT_OF_PAGE) }).map(
-              (currentPage, index) => (
-                <div
-                  key={index}
-                  onClick={(e) => handlePage(index + 1)}
-                  aria-current="page"
-                  className={`
+            {Array.from({ length: totalPages }).map((currentPage, index) => (
+              <div
+                key={index}
+                onClick={(e) => handlePage(index + 1)}
+                aria-current="page"
+                className={`
                   relative cursor-pointer z-10 inline-flex items-center ${
                     index + 1 === page
                       ? "bg-indigo-600 text-white"
                       : "bg-indigo-100 text-gray-400"
                   } px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
                   `}
-                >
-                  {index + 1}
-                </div>
-              )
-            )}
+              >
+                {index + 1}
+              </div>
+            ))}
 
-            <a
-              href="#"
+            <div
+              onClick={(e) => handlePage(page < totalPages ? page + 1 : page)}
               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </div>
           </nav>
         </div>
       </div>
