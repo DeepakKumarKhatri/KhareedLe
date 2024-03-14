@@ -9,6 +9,7 @@ import LandingPage from "./pages/LandingPage";
 import Cart from "./features/cart/Cart";
 import Checkout from "./pages/Checkout";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import Secure from "./features/auth/Components/Secure";
 
 const router = createBrowserRouter([
   {
@@ -25,19 +26,35 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <Secure>
+        <HomePage />
+      </Secure>
+    ),
   },
   {
     path: "/cart",
-    element: <Cart />,
+    element: (
+      <Secure>
+        <Cart />
+      </Secure>
+    ),
   },
   {
     path: "/checkout",
-    element: <Checkout />,
+    element: (
+      <Secure>
+        <Checkout />,
+      </Secure>
+    ),
   },
   {
     path: "/detail/:id",
-    element: <ProductDetailPage />,
+    element: (
+      <Secure>
+        <ProductDetailPage />,
+      </Secure>
+    ),
   },
 ]);
 

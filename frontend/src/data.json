@@ -50,7 +50,9 @@
       "brand": "Samsung",
       "category": "smartphones",
       "imageSrc": "https://cdn.dummyjson.com/product-images/3/thumbnail.jpg",
-      "images": ["https://cdn.dummyjson.com/product-images/3/1.jpg"],
+      "images": [
+        "https://cdn.dummyjson.com/product-images/3/1.jpg"
+      ],
       "color": "Black"
     },
     {
@@ -643,6 +645,23 @@
       "value": "fragrances",
       "label": "fragrances",
       "checked": false
+    }
+  ],
+  "users": [
+    {
+      "id": "ef1f",
+      "email": "deepak@gmail.com",
+      "password": "deepak@gmail.com"
+    },
+    {
+      "id": "dc86",
+      "email": "deepak@gmail.com",
+      "password": "deepak@gmail.com"
+    },
+    {
+      "id": "b666",
+      "email": "akash@gmail.com",
+      "password": "akash@gmail.com"
     }
   ]
 }

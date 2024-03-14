@@ -22,9 +22,9 @@ const Navbar = ({ children, setShowCart }) => {
     { name: "Blog", href: "#", current: false },
   ];
   const userNavigation = [
-    { name: "Your Profile", href: "#" },
-    { name: "Settings", href: "#" },
-    { name: "Sign out", href: "#" },
+    { name: "Your Profile", location: "/" },
+    { name: "Settings", location: "/" },
+    { name: "Sign out", location: "/signin" },
   ];
 
   const classNames = (...classes) => classes.filter(Boolean).join(" ");
@@ -38,7 +38,7 @@ const Navbar = ({ children, setShowCart }) => {
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
-                    <Link to={'/'}>
+                    <Link to={"/"}>
                       <div className="flex-shrink-0">
                         <img
                           className="h-12 w-18"
@@ -114,15 +114,15 @@ const Navbar = ({ children, setShowCart }) => {
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
-                                  <a
-                                    href={item.href}
+                                  <Link
+                                    to={item.location}
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
                                   >
                                     {item.name}
-                                  </a>
+                                  </Link>
                                 )}
                               </Menu.Item>
                             ))}
