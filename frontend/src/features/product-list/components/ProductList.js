@@ -474,7 +474,7 @@ const ProductGrid = ({ products }) => {
                 key={product.id}
                 className="group relative border-solid border-2 p-2 border-gray-200 rounded-xl"
               >
-                <Link to={"/detail"}>
+                <Link to={"/detail/" + product.id}>
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                     <img
                       src={product.imageSrc}
